@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI/CD Workflow
 
 on:
   push:
@@ -7,45 +7,31 @@ on:
 
 jobs:
   build:
+    name: Build and Deploy
     runs-on: ubuntu-latest
 
     steps:
-      # Vérification du code
-      - name: Checkout code
+      # Étape 1 : Vérification du code source
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # Installation des dépendances
-      - name: Set up Node.js
+      # Étape 2 : Configuration de Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: 18
 
-      - name: Install dependencies
+      # Étape 3 : Installation des dépendances
+      - name: Install Dependencies
         run: npm install
 
-      # Build du projet
-      - name: Build project
+      # Étape 4 : Build du projet
+      - name: Build Project
         run: npm run build
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-      # Vérification du code
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Install dependencies
-        run: npm install
-
-      # Build du projet
-      - name: Build project
-        run: npm run build
-
-      # Déploiement sur GitHub Pages
+      # Étape 5 : Déploiement sur GitHub Pages
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: ./build # Remplacez par le dossier généré après le build
